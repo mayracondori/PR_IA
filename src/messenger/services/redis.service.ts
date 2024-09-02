@@ -8,15 +8,15 @@ export class RedisService {
     private writerRedis: Redis;
     constructor(private configService: ConfigService) {
         this.readerRedis = new Redis({
-            host: configService.get<string>('REDIS_HOST'),
-            port: configService.get<number>('REDIS_PORT'),
-            password: configService.get<string>('REDIS_PASSWORD'),
+            host: configService.get<string>('172.20.29.22'),
+            port: configService.get<number>('6379'),
+            password: configService.get<string>('uais2022.'),
         });
 
         this.writerRedis = new Redis({
-            host: configService.get<string>('REDIS_HOST'),
-            port: configService.get<number>('REDIS_PORT'),
-            password: configService.get<string>('REDIS_PASSWORD'),
+            host: configService.get<string>('172.20.29.22'),
+            port: configService.get<number>('6379'),
+            password: configService.get<string>('uais2022.'),
         });
         console.log('CONNECTED TO REDIS!!!!')
     }
