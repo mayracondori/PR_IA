@@ -29,7 +29,20 @@ export class RedisService {
 
     async getFirstFromQueue(): Promise<any> {    
         const item = await this.readerRedis.brpop('queue3', 3);
-        return JSON.parse(item[1]);
+    
+        // Verifica si item es null o undefined
+        if (!item || item.length < 2) {
+            // Maneja el caso donde no se obtuvo ningún elemento de la cola
+            throw new Error('No items in the queue or timeout reached');
+        }
+    
+        // Intenta parsear el segundo elemento como JSON
+        try {
+            return JSON.parse(item[1]);
+        } catch (error) {
+            // Maneja errores de parseo JSON
+            throw new Error('Failed to parse item as JSON');
+        }
     }
 
     async consumeFromQueue(): Promise<any> {    

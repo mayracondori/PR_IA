@@ -24,7 +24,19 @@ export class QueueController {
 
     @Get('pop')
     async pop(): Promise<any> {
-        const item = await this.redisService.getFirstFromQueue();
-        return item;
+        try {
+            const item = await this.redisService.getFirstFromQueue();
+            return item;
+        } catch (error) {
+            if (error.message === 'No items in the queue or timeout reached') {
+                // Manejo específico para la cola vacía
+                return { message: 'La cola está vacía o el tiempo de espera ha expirado' };
+            }
+            // Manejo de otros errores
+            console.error('Error popping item from queue:', error.message);
+            return { error: 'Error al obtener el elemento de la cola' };
+        }
     }
+    
+    
 }
