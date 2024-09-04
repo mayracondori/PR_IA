@@ -1,0 +1,51 @@
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Queue } from "../entities/queue.entity";
+import { Channel } from "../entities/channel.entity";
+
+@Injectable()
+export class QueueService {
+    constructor(
+        @InjectRepository(Queue) private readonly queueRepository: Repository<Queue>,
+        @InjectRepository(Channel) private readonly channelRepository: Repository<Channel>,
+    ) {}
+
+    async processTask(task: any): Promise<void> {
+        const taskPayload = JSON.stringify(task);
+        let myqueue = await this.queueRepository.create({ redisId: task.id, payload: taskPayload});
+        myqueue = await this.queueRepository.save(myqueue);
+
+        let channel: Channel;
+        channel = await this.channelRepository.findOne({ where: { code: task.channel }});
+
+        if (!channel) {
+            myqueue.errorReason = `Channel ${task.channel} not found`;
+            myqueue.status = 'ERROR';
+            await this.queueRepository.save(myqueue);
+            return;
+        }
+        try {
+            await this.execute(channel.code, channel.config, task);
+        } catch (error) {
+            console.log('ERROR!!!!!', error);
+            myqueue.errorReason = error.message;
+            myqueue.status = 'ERROR';
+            await this.queueRepository.save(myqueue);
+            return;
+        }
+    }
+
+    private async execute(channel: string, config: any, taskPayload: any): Promise<void> {
+        switch(channel) {
+            case 'waapi': 
+                console.log('WAAPI SERVICE!!!!');
+                break;
+            case 'web': 
+                console.log('WEB SERVICE!!!!');
+                break;
+            default:
+                throw new Error(`Service ${channel} not found`);
+        }
+    }
+}

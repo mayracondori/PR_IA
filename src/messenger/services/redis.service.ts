@@ -8,15 +8,15 @@ export class RedisService {
     private writerRedis: Redis;
     constructor(private configService: ConfigService) {
         this.readerRedis = new Redis({
-            host: configService.get<string>('172.20.29.22'),
-            port: configService.get<number>('6379'),
-            password: configService.get<string>('uais2022.'),
+            host: configService.get<string>('REDIS_HOST'),
+            port: configService.get<number>('REDIS_PORT'),
+            password: configService.get<string>('REDIS_PASSWORD'),
         });
 
         this.writerRedis = new Redis({
-            host: configService.get<string>('172.20.29.22'),
-            port: configService.get<number>('6379'),
-            password: configService.get<string>('uais2022.'),
+            host: configService.get<string>('REDIS_HOST'),
+            port: configService.get<number>('REDIS_PORT'),
+            password: configService.get<string>('REDIS_PASSWORD'),
         });
         console.log('CONNECTED TO REDIS!!!!')
     }
@@ -28,8 +28,16 @@ export class RedisService {
     }
 
     async getFirstFromQueue(): Promise<any> {    
-        const item = await this.readerRedis.brpop('queue3', 0);
+        const item = await this.readerRedis.brpop('queue3', 3);
         return JSON.parse(item[1]);
+    }
+
+    async consumeFromQueue(): Promise<any> {    
+        const item = await this.readerRedis.brpop('queue3', 3);
+        if (item) {
+            return JSON.parse(item[1]);
+        }
+        return null;
     }
 
 }
