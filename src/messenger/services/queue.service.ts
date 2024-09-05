@@ -3,12 +3,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Queue } from "../entities/queue.entity";
 import { Channel } from "../entities/channel.entity";
+import { WaapiService } from "./waapi.service";
 
 @Injectable()
 export class QueueService {
     constructor(
         @InjectRepository(Queue) private readonly queueRepository: Repository<Queue>,
         @InjectRepository(Channel) private readonly channelRepository: Repository<Channel>,
+        private readonly waapiService: WaapiService,
     ) {}
 
     async processTask(task: any): Promise<void> {
@@ -26,20 +28,23 @@ export class QueueService {
             return;
         }
         try {
-            await this.execute(channel.code, channel.config, task);
+            await this.execute(channel.code, JSON.parse(channel.config), task);
         } catch (error) {
-            console.log('ERROR!!!!!', error);
+            //console.log('ERROR!!!!!', error);
             myqueue.errorReason = error.message;
             myqueue.status = 'ERROR';
             await this.queueRepository.save(myqueue);
             return;
         }
+        myqueue.status = 'PROCESSED';
+        await this.queueRepository.save(myqueue);
     }
 
     private async execute(channel: string, config: any, taskPayload: any): Promise<void> {
+        console.log(config);
         switch(channel) {
-            case 'waapi': 
-                console.log('WAAPI SERVICE!!!!');
+            case 'waapi':
+                this.waapiService.execute(config, taskPayload);
                 break;
             case 'web': 
                 console.log('WEB SERVICE!!!!');
