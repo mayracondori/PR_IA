@@ -30,7 +30,7 @@ export class QueueService {
         try {
             await this.execute(channel.code, JSON.parse(channel.config), task);
         } catch (error) {
-            //console.log('ERROR!!!!!', error);
+            console.log('ERROR!!!!!', error);
             myqueue.errorReason = error.message;
             myqueue.status = 'ERROR';
             await this.queueRepository.save(myqueue);
@@ -41,9 +41,8 @@ export class QueueService {
     }
 
     private async execute(channel: string, config: any, taskPayload: any): Promise<void> {
-        console.log(config);
         switch(channel) {
-            case 'waapi':
+            case 'waapi': 
                 this.waapiService.execute(config, taskPayload);
                 break;
             case 'web': 

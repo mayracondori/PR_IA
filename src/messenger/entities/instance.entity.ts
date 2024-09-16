@@ -1,6 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Channel } from "./channel.entity";
 import { channel } from "diagnostics_channel";
+import { Thread } from "./thread.entity";
+import { InstanceAssistant } from "./instance-assistant.entity";
 
 @Entity()
 export class Instance {
@@ -20,4 +22,9 @@ export class Instance {
     @Column()
     channelId: number;
 
+    @OneToMany(() => Thread, thread => thread.instance)
+    threads: Thread[];
+
+    @OneToMany(()=> InstanceAssistant, instanceAssistant => instanceAssistant.instance)
+    instanceAssistants: InstanceAssistant[];
 }

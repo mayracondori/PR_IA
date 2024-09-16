@@ -1,0 +1,36 @@
+@startuml
+actor User
+
+participant "Client Application" as CA
+participant "OpenAI API" as API
+participant "Function Endpoint" as FE
+
+alt thread - POSTMAN (endpont 1)
+    User -> CA : Iniciar conversación
+    CA -> API : Crear nuevo thread
+    API -> CA : Devuelve thread ID
+end
+
+loop loop - Conversación
+    alt mensaje - POSTMAN (endpoint 2)
+        User -> CA : Enviar mensaje
+        CA -> API : Enviar mensaje con thread ID
+        API -> API : Procesar mensaje
+    end 
+
+    alt Función requerida (endpoint 3,4)
+        API -> CA : Solicitar ejecución de función
+        CA -> FE : Ejecutar función
+        FE -> CA : Devuelve resultado de función        
+        CA -> API : Enviar resultado de función        
+    end
+        API -> CA : Envisr respuesta
+CA -> User : Mostrar respuesta
+end 
+
+== Manejo de Runs ==
+CA -> API : Iniciar un "run"
+API -> API : Ejecutar "run"
+API -> CA : Resultado del "run"
+
+@enduml
