@@ -8,25 +8,25 @@ import { Request } from "express";
 
 
 @Controller('user')
-@UseGuards(PermissionsGuard) // Guardian 
+// @UseGuards(PermissionsGuard) // Guardian 
 export class UserController {
     constructor(private readonly userService: UserService) {}
     
     @Post()
-    @Permissions('createUser')
+    // @Permissions('createUser')
     createUser(@Body() createUserDto: CreateUserDto): Promise<any> {
         return this.userService.create(createUserDto);
     }
 
-    @Post('refresh-token')
-    @Permissions('refreshToken')
-    refreshToken(@Req() request: Request): Promise<any> {
-        return this.userService.generateRefreshToken(request);
-    }
+    // @Post('refresh-token')
+    // @Permissions('refreshToken')
+    // refreshToken(@Req() request: Request): Promise<any> {
+    //     return this.userService.generateRefreshToken(request);
+    // }
 
-    @Post('access-token')
-    @Permissions('accessToken')
-    accessToken(@Req() request: Request): Promise<any> {
-        return this.userService.generateAccessToken(request);
-    }
+    // @Post('access-token')
+    // @Permissions('accessToken')
+    // accessToken(@Req() request: Request): Promise<any> {
+    //     return this.userService.generateAccessToken(request);
+    // }
 }
