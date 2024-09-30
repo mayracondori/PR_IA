@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MessengerModule } from './messenger/messenger.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -19,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: true, //never true in production environment
         logging:false,
         timezone: 'Z', // This forces UTC
         ssl: {
@@ -28,7 +29,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
       inject: [ConfigService],
     }),
-    MessengerModule
+    MessengerModule,
+    AuthModule,
   ],
   
 })

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { RedisService } from "../services/redis.service";
+import { EnqueueDto } from "../dtos/enqueue.dto";
 
 @Controller('queue')
 export class QueueController {
@@ -7,17 +8,12 @@ export class QueueController {
 
     @Post(':type/:channel/:instance') // type: in/out
     async enqueue(
-        @Param('type') type: string,
-        @Param('channel') channel: string,
-        @Param('instance') instance: string,
-
+        @Param() params: EnqueueDto,
         @Body() body: any): Promise<{id: string}> 
         {
         const id = await this.redisService.addToQueue({
             ...body,
-            type,
-            channel,
-            instance,
+            ...params
         });
         return { id };
     }

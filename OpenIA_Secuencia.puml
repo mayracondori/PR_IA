@@ -22,7 +22,7 @@ loop loop - Conversación
         API -> CA : Solicitar ejecución de función
         CA -> FE : Ejecutar función
         FE -> CA : Devuelve resultado de función        
-        CA -> API : Enviar resultado de función        
+        CA -> API : Enviar resultado de función
     end
         API -> CA : Envisr respuesta
 CA -> User : Mostrar respuesta
@@ -32,5 +32,5 @@ end
 CA -> API : Iniciar un "run"
 API -> API : Ejecutar "run"
 API -> CA : Resultado del "run"
-
+== ==
 @enduml

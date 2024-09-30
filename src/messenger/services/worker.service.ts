@@ -27,6 +27,7 @@ export class WorkerService implements OnModuleInit, OnModuleDestroy {
             
             if (task) {
                 try {
+                    console.log('PROCESS:', task);
                     this.queueService.processTask(task);
                 } catch (error) {
                     console.error('Failed to process task: ', task, error);

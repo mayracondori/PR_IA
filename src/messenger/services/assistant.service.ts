@@ -27,8 +27,6 @@ export class AssistantService {
             relations: ['assistant']
         });
 
-        console.log('instanceAssistant:', instanceAssistant);
-
         return instanceAssistant ? instanceAssistant.assistant : undefined;
     }
 }
