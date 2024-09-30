@@ -10,7 +10,7 @@ class IsPasswordRequiredConstraint implements ValidatorConstraintInterface {
         return password != null && password.length > 0;
     }   
     defaultMessage(validationArguments?: ValidationArguments): string {
-        return 'El passowrd es requerido a no ser que se trate de un usuario de tipo API'; 
+        return 'La contraseña es requerida a no ser que se trate de un usuario de tipo API'; 
     } 
 }
 
