@@ -25,7 +25,7 @@ export class UserService {
             const accessToken = this.jwtService.sign(payload, { expiresIn: '30m' });
             return {refreshToken, accessToken };
         } else {
-            throw new BadRequestException('Generate Refresh Token is only allowed for API users.');
+            throw new BadRequestException('La generación del Refresh Token está habilitada solo para API users.');
         }
     }
 

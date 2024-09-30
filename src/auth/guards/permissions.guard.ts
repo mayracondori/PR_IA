@@ -19,13 +19,13 @@ export class PermissionsGuard implements CanActivate {
         const authHeader = request.headers.authorization;
 
         if (!authHeader) {
-            throw new UnauthorizedException('Authorization header not found');
+            throw new UnauthorizedException('Header de autorización no encontrado');
         }
 
         const token = authHeader.split(' ')[1];
 
         if (!token) {
-            throw new UnauthorizedException('Token not found');
+            throw new UnauthorizedException('Token no encontrado');
             
         }
         try {
