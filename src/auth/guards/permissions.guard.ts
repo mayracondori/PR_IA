@@ -36,7 +36,7 @@ export class PermissionsGuard implements CanActivate {
 
             return this.matchPermissions(permissions, user.roles);
         } catch (e) {
-            throw new UnauthorizedException('Invalid Token');
+            throw new UnauthorizedException('Token inválido');
         }
         
     }
